@@ -39,8 +39,7 @@ class CMakeBuild(build_ext):
         if not extdir.endswith(os.path.sep):
             extdir += os.path.sep
 
-        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-                      '-DPYTHON_EXECUTABLE=' + sys.executable]
+        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir]
 
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
@@ -52,6 +51,9 @@ class CMakeBuild(build_ext):
             build_args += ['--', '/m']
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
+            cmake_args += [
+                '-DPYTHON_EXECUTABLE_HINT={}'.format(sys.executable),
+            ]
             build_args += ['--', '-j2']
 
         env = os.environ.copy()
@@ -70,7 +72,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name='x2camf',
-    version=PACKAGE_VERSION,
+    version='0.1',
     author=AUTHOR,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,

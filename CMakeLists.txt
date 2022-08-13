@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
 project(x2camf)
 
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+FIND_PROGRAM(CMAKE_C_COMPILER NAMES $ENV{CC} gcc PATHS ENV PATH NO_DEFAULT_PATH)
+FIND_PROGRAM(CMAKE_CXX_COMPILER NAMES $ENV{CXX} g++ PATHS ENV PATH NO_DEFAULT_PATH)
+FIND_PROGRAM(CMAKE_Fortran_COMPILER NAMES $ENV{FC} gfortran PATHS ENV PATH NO_DEFAULT_PATH)
+
+# find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(OpenMP)
 set(SHARED_SRC
   src/dhf_sph_ca.cpp
@@ -17,8 +21,8 @@ set(SHARED_SRC
 #set(CMAKE_CXX_FLAGS "-fPIC")
 
 add_subdirectory(pybind11)
-include_directories(include)
-link_libraries(Eigen3::Eigen)
+include_directories(include $ENV{Eigen3_DIR})
+# link_libraries(Eigen3::Eigen)
 link_libraries(OpenMP::OpenMP_CXX)
 
 add_library(shared_objects OBJECT ${SHARED_SRC})
